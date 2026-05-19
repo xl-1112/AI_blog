@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Calendar, Clock, MoveUpRight } from 'lucide-react'
-import { getReadingMinutes, type ArticleSummary } from '../lib/api'
+import { getReadingMinutes, resolveAssetUrl, type ArticleSummary } from '../lib/api'
 import { cn } from '../lib/utils'
 
 type ArticleCardProps = {
@@ -12,7 +12,7 @@ type ArticleCardProps = {
 export function ArticleCard({ article, featured = false, className }: ArticleCardProps) {
   return (
     <Link
-      to={`/articles/${article.id}`}
+      to={`/site/articles/${article.slug || article.id}`}
       className={cn(
         'group block rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.1)]',
         featured && 'relative overflow-hidden',
@@ -23,15 +23,20 @@ export function ArticleCard({ article, featured = false, className }: ArticleCar
         <span className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--accent),var(--accent-secondary))]" />
       ) : null}
       <article className="space-y-4">
+        {article.coverUrl ? (
+          <img
+            src={resolveAssetUrl(article.coverUrl)}
+            alt={`${article.title} 封面`}
+            className="aspect-[16/9] w-full rounded-xl object-cover"
+            loading="lazy"
+          />
+        ) : null}
         <div className="flex flex-wrap items-center gap-2">
-          {article.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 text-xs font-medium tracking-normal text-[var(--accent)]"
-            >
-              {tag}
+          {article.category ? (
+            <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium tracking-normal text-slate-600">
+              {article.category}
             </span>
-          ))}
+          ) : null}
         </div>
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-4">
@@ -51,6 +56,7 @@ export function ArticleCard({ article, featured = false, className }: ArticleCar
             <Clock className="h-3.5 w-3.5" />
             {getReadingMinutes(article)} 分钟阅读
           </span>
+          <span>{article.viewCount ?? 0} 次浏览</span>
         </div>
       </article>
     </Link>

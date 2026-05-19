@@ -12,27 +12,35 @@ import (
 func main() {
 	addr := getenv("ADDR", ":8080")
 	dataPath := getenv("DATA_PATH", "data/site.json")
+	databasePath := getenv("DATABASE_PATH", "data/blog.db")
 	uploadDir := getenv("UPLOAD_DIR", "uploads")
-	adminToken := os.Getenv("ADMIN_TOKEN")
-	if adminToken == "" {
-		adminToken = "dev-admin-token"
-		log.Println("ADMIN_TOKEN is not set; using development token: dev-admin-token")
+	initialPassword := os.Getenv("ADMIN_INITIAL_PASSWORD")
+	if initialPassword == "" {
+		initialPassword = "dev-admin-token"
+		log.Println("ADMIN_INITIAL_PASSWORD is not set; using development password for admin: dev-admin-token")
+	}
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		jwtSecret = "dev-jwt-secret-change-me"
+		log.Println("JWT_SECRET is not set; using development JWT secret")
 	}
 
-	store := cms.NewStore(dataPath)
-	if err := store.Load(); err != nil {
-		log.Fatalf("load content store: %v", err)
+	store, err := cms.OpenStore(databasePath, dataPath, initialPassword)
+	if err != nil {
+		log.Fatalf("open database store: %v", err)
 	}
+	defer store.Close()
 
 	handler := cms.NewServer(store, cms.Config{
-		AdminToken:    adminToken,
+		JWTSecret:     jwtSecret,
 		UploadDir:     uploadDir,
 		CORSOrigins:   splitCSV(getenv("CORS_ORIGIN", "http://127.0.0.1:5173,http://localhost:5173")),
 		MaxUploadSize: 5 << 20,
 	})
 
 	log.Printf("Liang CMS API listening on http://127.0.0.1%s", addr)
-	log.Printf("Content file: %s", dataPath)
+	log.Printf("SQLite database: %s", databasePath)
+	log.Printf("Seed content file: %s", dataPath)
 	log.Printf("Uploads dir: %s", uploadDir)
 	if err := http.ListenAndServe(addr, handler); err != nil {
 		log.Fatal(err)

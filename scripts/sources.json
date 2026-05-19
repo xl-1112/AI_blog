@@ -1,0 +1,36 @@
+{
+  "official": [
+    {
+      "name": "OpenAI Blog",
+      "type": "rss",
+      "url": "https://openai.com/news/rss.xml"
+    },
+    {
+      "name": "Google AI Blog",
+      "type": "rss",
+      "url": "https://blog.google/technology/ai/rss/"
+    },
+    {
+      "name": "Anthropic News",
+      "type": "rss",
+      "url": "https://www.anthropic.com/news/rss.xml"
+    },
+    {
+      "name": "Microsoft AI Blog",
+      "type": "rss",
+      "url": "https://blogs.microsoft.com/ai/feed/"
+    }
+  ],
+  "media": [
+    {
+      "name": "The Verge AI",
+      "type": "rss",
+      "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
+    },
+    {
+      "name": "TechCrunch AI",
+      "type": "rss",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/"
+    }
+  ]
+}

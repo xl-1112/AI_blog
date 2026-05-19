@@ -1,0 +1,8 @@
+backend/data/*.db
+backend/uploads/
+logs/
+codex/
+content/
+github/
+source/
+dist/

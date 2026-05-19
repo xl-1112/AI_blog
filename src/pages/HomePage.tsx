@@ -48,11 +48,11 @@ export function HomePage() {
               <p className="max-w-2xl text-lg leading-8 text-[var(--muted-foreground)]">{content.home.intro}</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="#/articles" showArrow>
-                阅读文章
+              <ButtonLink href="#/site/articles" showArrow>
+                {content.home.primaryCtaText || '阅读文章'}
               </ButtonLink>
-              <ButtonLink href="#/about" variant="secondary">
-                关于我
+              <ButtonLink href="#/site/about" variant="secondary">
+                {content.home.secondaryCtaText || '关于我'}
               </ButtonLink>
             </div>
             <div className="grid max-w-2xl grid-cols-3 gap-3">
@@ -82,7 +82,7 @@ export function HomePage() {
                   <p className="mt-3 text-sm leading-7 text-[var(--muted-foreground)]">{highlighted.summary}</p>
                 </div>
                 <Link
-                  to={`/articles/${highlighted.id}`}
+                  to={`/site/articles/${highlighted.slug || highlighted.id}`}
                   className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                 >
                   查看精选文章

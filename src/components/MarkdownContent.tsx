@@ -14,6 +14,10 @@ type MarkdownContentProps = {
 }
 
 export function MarkdownContent({ content, className = 'prose-blog' }: MarkdownContentProps) {
+  if (isHtmlContent(content)) {
+    return <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
+  }
+
   return (
     <div className={className}>
       {parseMarkdown(content).map((block, index) => (
@@ -21,6 +25,10 @@ export function MarkdownContent({ content, className = 'prose-blog' }: MarkdownC
       ))}
     </div>
   )
+}
+
+function isHtmlContent(content: string) {
+  return /<\/?(p|div|h[1-6]|ul|ol|li|blockquote|pre|code|table|thead|tbody|tr|td|th|img|figure|br|strong|em|a)\b/i.test(content)
 }
 
 function MarkdownBlock({ block }: { block: Block }) {

@@ -5,9 +5,9 @@ import { cn } from '../lib/utils'
 import { useSiteContent } from '../lib/useSiteContent'
 
 const links = [
-  { to: '/', label: '首页', icon: Home },
-  { to: '/articles', label: '文章', icon: BookOpen },
-  { to: '/about', label: '关于我', icon: UserRound },
+  { to: '/site', label: '首页', icon: Home },
+  { to: '/site/articles', label: '文章', icon: BookOpen },
+  { to: '/site/about', label: '关于我', icon: UserRound },
 ]
 
 export function SiteHeader() {
@@ -18,7 +18,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_86%,transparent)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
-        <NavLink to="/" className="inline-flex min-w-0 items-center focus-visible:outline-none">
+        <NavLink to="/site" className="inline-flex min-w-0 items-center focus-visible:outline-none">
           <span className="flex h-12 w-36 shrink-0 items-center justify-start overflow-visible">
             {logoUrl ? (
               <img src={logoUrl} alt={`${siteName} logo`} className="h-full w-full object-contain object-left" />
@@ -35,6 +35,7 @@ export function SiteHeader() {
               <NavLink
                 key={link.to}
                 to={link.to}
+                end={link.to === '/site'}
                 className={({ isActive }) =>
                   cn(
                     'inline-flex min-h-10 items-center gap-2 rounded-full border border-transparent px-3 text-sm font-medium text-[var(--muted-foreground)] transition-all hover:bg-[var(--muted)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:px-4',

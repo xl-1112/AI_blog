@@ -1,0 +1,46 @@
+name: Daily AI News Blog
+
+on:
+  schedule:
+    - cron: "30 23 * * *"
+      timezone: "Asia/Shanghai"
+  workflow_dispatch:
+
+jobs:
+  generate-ai-news:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Codex
+        run: npm install -g @openai/codex
+
+      - name: Fetch AI news
+        run: npx tsx scripts/fetch-ai-news.ts
+
+      - name: Generate article with Codex
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          codex exec --full-auto < scripts/codex-generate-prompt.md
+
+      - name: Commit generated article
+        run: |
+          git config user.name "ai-news-bot"
+          git config user.email "ai-news-bot@users.noreply.github.com"
+          git add source/_posts content/latest-ai-news.json
+          git diff --cached --quiet || git commit -m "docs: add daily AI news"
+          git push

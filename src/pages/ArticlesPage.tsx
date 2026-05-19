@@ -50,12 +50,12 @@ export function ArticlesPage() {
     const keyword = query.trim().toLowerCase()
 
     return articles.filter((article) => {
-      const matchesTag = activeTag === '全部' || article.tags.includes(activeTag)
+      const matchesTag = activeTag === '全部' || article.category === activeTag
       const matchesQuery =
         !keyword ||
         article.title.toLowerCase().includes(keyword) ||
         article.summary.toLowerCase().includes(keyword) ||
-        article.tags.some((tag) => tag.toLowerCase().includes(keyword))
+        article.category.toLowerCase().includes(keyword)
 
       return matchesTag && matchesQuery
     })
